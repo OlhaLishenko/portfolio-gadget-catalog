@@ -49,7 +49,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           }}
           id={product.itemId}
         >
-          <img src={`${image}`} className="product-card__image" />
+          <img
+            src={`${image}`}
+            className="product-card__image"
+            loading="lazy"
+          />
         </Link>
         <div className="product-card__container-info">
           <Link

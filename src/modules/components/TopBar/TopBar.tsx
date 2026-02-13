@@ -16,16 +16,15 @@ import { getPath } from '../../shared/servises/getPath';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { TranslationContext } from '../../../i18next/shared/TranslationContext';
-import { FavesContext } from '../../shared/context/FavesContext';
-import { StateCartContext } from '../../shared/reducer/CartReducer';
+import { useAppSelector } from '../../shared/hooks/redyxTypes';
 
 type TopBarProps = {
   buttonData: IconList['menu'] | IconList['close'];
 };
 
 export const TopBar: React.FC<TopBarProps> = ({ buttonData }) => {
-  const { favourites } = useContext(FavesContext);
-  const { cartList } = useContext(StateCartContext);
+  const favourites = useAppSelector(state => state.favourites);
+  const { cartList } = useAppSelector(state => state.cart);
   const { setIsAside } = useContext(ProductListContext);
   const settingsState = useContext(UISettingsState);
   const { isDesktop, isMobile } = useContext(ScreenState);

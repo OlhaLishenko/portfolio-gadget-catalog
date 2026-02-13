@@ -6,20 +6,24 @@ import { ProductDetailsPage } from './modules/components/ProductDetailsPage';
 import { Favourites } from './modules/components/Favourites';
 import { CartPage } from './modules/components/CartPage';
 import { NotFoundPage } from './modules/components/NotFoundPage';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
 
 export const Root = () => {
   return (
-    <Routes>
-      <Route path="/" element={<App />}>
-        <Route index element={<HomePage />} />
-        <Route path="home" element={<Navigate to="/" replace />} />
-        <Route path=":category" element={<ProductsPage />} />
-        <Route path=":category/:productId" element={<ProductDetailsPage />} />
-        <Route path="favourites" element={<Favourites />} />
-        <Route path="cart" element={<CartPage />} />
-        <Route path="not-found" element={<NotFoundPage />} />
-      </Route>
-      <Route path="*" element={<span>Nothig was found</span>} />
-    </Routes>
+    <Provider store={store}>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route index element={<HomePage />} />
+          <Route path="home" element={<Navigate to="/" replace />} />
+          <Route path=":category" element={<ProductsPage />} />
+          <Route path=":category/:productId" element={<ProductDetailsPage />} />
+          <Route path="favourites" element={<Favourites />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="not-found" element={<NotFoundPage />} />
+        </Route>
+        <Route path="*" element={<span>Nothig was found</span>} />
+      </Routes>
+    </Provider>
   );
 };

@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
 import './Modal.scss';
-import { DispatchCartContext } from '../../../reducer/CartReducer';
 import { TranslationContext } from '../../../../../i18next/shared/TranslationContext';
+import { createPortal } from 'react-dom';
+import { useAppDispatch } from '../../../hooks/redyxTypes';
+import { clear as clearCart } from '../../../../../features/cart';
 
 type ModalProps = {
   handleModal?: (arg: boolean) => void;
@@ -11,15 +13,21 @@ type ModalProps = {
 
 export const Modal: React.FC<ModalProps> = React.memo(
   ({ message, type, handleModal }) => {
+    const modalRoot = document.getElementById('modal-root');
+
     const { notifMessage, btnsTitle } = useContext(TranslationContext);
-    const cartDispatch = useContext(DispatchCartContext);
+    const dispatch = useAppDispatch();
+
+    if (!modalRoot) {
+      return null;
+    }
 
     const handleConfirm = () => {
       if (!handleModal) {
         return;
       }
 
-      cartDispatch({ type: 'clearCart' });
+      dispatch(clearCart());
 
       handleModal(false);
     };
@@ -28,7 +36,7 @@ export const Modal: React.FC<ModalProps> = React.memo(
       window.location.reload();
     };
 
-    return (
+    return createPortal(
       <div className="cart-modal">
         <div className="cart-modal__overlay">
           <div className="modal">
@@ -62,7 +70,8 @@ export const Modal: React.FC<ModalProps> = React.memo(
             </div>
           </div>
         </div>
-      </div>
+      </div>,
+      modalRoot,
     );
   },
 );

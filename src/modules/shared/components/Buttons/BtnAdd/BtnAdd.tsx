@@ -1,15 +1,16 @@
 import React, { useContext } from 'react';
 import './BtnAdd.scss';
 import { NotifDispatchContext } from '../../../reducer/NotificationReduce';
-import {
-  DispatchCartContext,
-  StateCartContext,
-} from '../../../../shared/reducer/CartReducer';
 import { Product } from '../../../types/Product';
 import '../../../../../i18next';
 import { TranslationContext } from '../../../../../i18next/shared/TranslationContext';
 import classNames from 'classnames';
 import { ProductListContext } from '../../../context/ProductListContext';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redyxTypes';
+import {
+  add as addCartItem,
+  remove as removeCartItem,
+} from '../../../../../features/cart';
 
 type BtnAddProps = {
   selectedProductID: string;
@@ -17,19 +18,16 @@ type BtnAddProps = {
 
 export const BtnAdd: React.FC<BtnAddProps> = ({ selectedProductID }) => {
   const notifDispatch = useContext(NotifDispatchContext);
-  const cartState = useContext(StateCartContext);
-  const cartDispatch = useContext(DispatchCartContext);
+  const { cartList } = useAppSelector(state => state.cart);
+  const dispatch = useAppDispatch();
   const { productList } = useContext(ProductListContext);
-  const { cartList } = cartState;
   const { btnsTitle, additionalText } = useContext(TranslationContext);
 
   const product: Product = productList.filter(
     p => p.itemId === selectedProductID,
   )[0];
 
-  const isAdded: boolean = cartState.cartList.some(
-    item => item.id === selectedProductID,
-  );
+  const isAdded: boolean = cartList.some(item => item.id === selectedProductID);
 
   const addToCart = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -40,35 +38,14 @@ export const BtnAdd: React.FC<BtnAddProps> = ({ selectedProductID }) => {
     }
 
     if (isAdded) {
-      cartDispatch({ type: 'removeItem', payload: selectedProductID });
+      dispatch(removeCartItem(selectedProductID));
 
       return;
     }
 
     try {
-      if (cartList.length === 0) {
-        cartDispatch({
-          type: 'addItem',
-          payload: {
-            id: product.itemId,
-            quantity: 1,
-            product: {
-              name: product.name,
-              image: product.image,
-              price: product.price,
-            },
-          },
-        });
-
-        notifDispatch({
-          type: 'addProduct',
-          payload: `${cartState.cartList.length + 1} ${additionalText.itemsInCart}`,
-        });
-      }
-
-      cartDispatch({
-        type: 'addItem',
-        payload: {
+      dispatch(
+        addCartItem({
           id: product.itemId,
           quantity: 1,
           product: {
@@ -76,11 +53,11 @@ export const BtnAdd: React.FC<BtnAddProps> = ({ selectedProductID }) => {
             image: product.image,
             price: product.price,
           },
-        },
-      });
+        }),
+      );
       notifDispatch({
         type: 'addProduct',
-        payload: `${cartState.cartList.length + 1} ${additionalText.itemsInCart}`,
+        payload: `${cartList.length + 1} ${additionalText.itemsInCart}`,
       });
     } finally {
       setTimeout(() => notifDispatch({ type: 'cancel' }), 4000);

@@ -1,8 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import './BtnLike.scss';
 import classNames from 'classnames';
 import { icons } from '../../../../../global-assets/static';
-import { FavesContext } from '../../../context/FavesContext';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redyxTypes';
+import { add, remove } from '../../../../../features/favourites';
 
 type BtnLikeProps = {
   buttonSize: 'small' | 'medium';
@@ -11,7 +12,8 @@ type BtnLikeProps = {
 
 export const BtnLike: React.FC<BtnLikeProps> = React.memo(
   ({ buttonSize, productId }) => {
-    const { favourites, setFavourites } = useContext(FavesContext);
+    const favourites = useAppSelector(state => state.favourites);
+    const dispatch = useAppDispatch();
     const IconLike = icons.like.valuePath;
     const IconLikeFill = icons.likeFill.valuePath;
 
@@ -20,19 +22,15 @@ export const BtnLike: React.FC<BtnLikeProps> = React.memo(
         event.preventDefault();
         event.stopPropagation();
 
-        if (favourites.includes(productId)) {
-          const filteredFaves = favourites.filter(
-            (prodItem: string) => prodItem !== productId,
-          );
-
-          setFavourites(filteredFaves);
+        if (!favourites.includes(productId)) {
+          dispatch(add(productId));
 
           return;
         }
 
-        setFavourites([...favourites, productId]);
+        dispatch(remove(productId));
       },
-      [favourites, productId, setFavourites],
+      [dispatch, favourites, productId],
     );
 
     return (

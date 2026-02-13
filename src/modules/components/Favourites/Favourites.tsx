@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import './Favourites.scss';
 import { MainHeader } from '../../shared/components/ui/MainHeader';
-import { FavesContext } from '../../shared/context/FavesContext';
 import { ProductListContext } from '../../shared/context/ProductListContext';
 import { ProductCard } from '../../shared/components/ui/ProductCard';
 import { getCartList } from '../../shared/servises/getCartList';
 import { TranslationContext } from '../../../i18next/shared/TranslationContext';
+import { useAppSelector } from '../../shared/hooks/redyxTypes';
 
 export const Favourites: React.FC = () => {
   const pageTitleList = useContext(TranslationContext).navList;
-  const { favourites } = useContext(FavesContext);
+  const favourites = useAppSelector(state => state.favourites);
   const { productList } = useContext(ProductListContext);
 
   const title = pageTitleList.filter(

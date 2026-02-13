@@ -39,12 +39,22 @@
 
     &__btn-close {
       cursor: pointer;
+      transition: all 0.3 ease-in-out;
+
+      &:hover {
+        transform: scale(1.4);
+      }
     }
 
     &__icon {
       color: $light-grey-text;
       width: 16px;
       height: 16px;
+      transition: all 0.3 ease-in-out;
+
+      &:hover {
+        color: $primary-text-color;
+      }
     }
 
     &__image {

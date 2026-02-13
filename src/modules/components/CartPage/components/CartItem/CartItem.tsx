@@ -1,30 +1,35 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import './CartItem.scss';
 import { CircleButton } from '../../../../shared/components/Buttons/CircleButton';
 import { icons } from '../../../../../global-assets/static';
-import { DispatchCartContext } from '../../../../shared/reducer/CartReducer';
 import { CartElement } from '../../../../shared/types/CartElement';
 import { motion } from 'framer-motion';
+import { useAppDispatch } from '../../../../shared/hooks/redyxTypes';
+import {
+  decrease as decreaseCartItem,
+  increase as increaseCartItem,
+  remove as removeCartItem,
+} from '../../../../../features/cart';
 
 type CartItemProps = {
   product: CartElement;
 };
 
 export const CartItem: React.FC<CartItemProps> = React.memo(({ product }) => {
-  const cartDispatch = useContext(DispatchCartContext);
+  const dispatch = useAppDispatch();
   const IconCancel = icons.close.valuePath;
 
   const deleteProduct = useCallback(() => {
-    cartDispatch({ type: 'removeItem', payload: product.id });
-  }, [product.id, cartDispatch]);
+    dispatch(removeCartItem(product.id));
+  }, [product.id, dispatch]);
 
-  const decreaseProductAmount = () => {
-    cartDispatch({ type: 'decrease', payload: product.id });
-  };
+  const decreaseProductAmount = useCallback(() => {
+    dispatch(decreaseCartItem(product.id));
+  }, [product.id, dispatch]);
 
-  const increaseProductAmount = () => {
-    cartDispatch({ type: 'increase', payload: product.id });
-  };
+  const increaseProductAmount = useCallback(() => {
+    dispatch(increaseCartItem(product.id));
+  }, [product.id, dispatch]);
 
   return (
     <motion.div

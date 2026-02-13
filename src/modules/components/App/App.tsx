@@ -5,9 +5,7 @@ import { TopBar } from '../TopBar';
 import { Footer } from '../Footer';
 import { MobileNavigation } from '../MobileNavigation';
 import { ProductListProvider } from '../../shared/context/ProductListContext';
-import { FavesProvider } from '../../shared/context/FavesContext';
 import { GlobalNotifProvider } from '../../shared/reducer/NotificationReduce';
-import { GlobalCartListProvider } from '../../shared/reducer/CartReducer';
 import { GlobalProductsProvider } from '../../shared/reducer/ProductPageReducer';
 import { GlobalProductDetailsProvider } from '../../shared/reducer/SelectedProductReducer';
 import { Outlet } from 'react-router-dom';
@@ -23,22 +21,18 @@ export const App: React.FC = () => {
           <SortProvider>
             <GlobalProductsProvider>
               <GlobalProductDetailsProvider>
-                <FavesProvider>
-                  <GlobalCartListProvider>
-                    <GlobalNotifProvider>
-                      <div className="app">
-                        <div className="app__content">
-                          <MobileNavigation />
-                          <div className="app__content-top">
-                            <TopBar buttonData={icons.menu} />
-                            <Outlet />
-                          </div>
-                        </div>
-                        <Footer />
+                <GlobalNotifProvider>
+                  <div className="app">
+                    <div className="app__content">
+                      <MobileNavigation />
+                      <div className="app__content-top">
+                        <TopBar buttonData={icons.menu} />
+                        <Outlet />
                       </div>
-                    </GlobalNotifProvider>
-                  </GlobalCartListProvider>
-                </FavesProvider>
+                    </div>
+                    <Footer />
+                  </div>
+                </GlobalNotifProvider>
               </GlobalProductDetailsProvider>
             </GlobalProductsProvider>
           </SortProvider>
