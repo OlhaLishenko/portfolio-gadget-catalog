@@ -4,7 +4,7 @@
 
 <div align="center">
 
-<h2> ------- ## 📱 Gadget Catalog ## -------- </h2>
+<h2> ------- 📱 Gadget Catalog  -------- </h2>
 </div>
 
 ## 📃 Project description
